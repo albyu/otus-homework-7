@@ -504,7 +504,247 @@ response:
 
 #### billing (локальный биллинг)
 
-
-
 #### delivery (CRM доставки)
+
+#### notification (сервис доставки уведомлений клиентам)
+
+#### orchestra (оркестратор согласования заказа)
+
+#### order (сервис управления заказом)
+
+##### POST /place Создание заказа
+
+```
+Example Request Value
+{
+  "id": "string",
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+      },
+      "quantity": 1
+    }
+  ]
+}
+```
+
+```
+Example Response Value
+{
+  "id": "string",
+  "status": "NEW",
+  "version": 0
+  "orderItems": [
+    {
+      "id": 0,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0
+      },
+      "quantity": 0
+    }
+  ]
+}
+```
+
+
+##### PUT /adjust Изменение заказа
+
+```
+Example Request Value
+{
+  "id": "string",
+  "orderItems": [
+    {
+      "id": 2,
+      "product": {
+        "id": 2,
+      },
+      "quantity": 3
+    }
+  ]
+}
+```
+
+```
+Example Response Value
+{
+  "id": "string",
+  "status": "NEW",
+  "version": 1
+  "orderItems": [
+    {
+      "id": 2,
+      "product": {
+        "id": 2,
+        "name": "string",
+        "price": 0.98
+      },
+      "quantity": 1
+    }
+  ]
+}
+```
+
+
+##### PUT /cancel Отмена заказа
+
+```
+Example Request Value
+{
+  "id": "string",
+  "status": "CANCELED",
+  "version": 0
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+        "name": "string",
+        "price": 0.23
+      },
+      "quantity": 1
+    }
+  ]
+}
+```
+
+
+```
+Example Response Value
+{
+  "id": "string",
+  "status": "CANCELED",
+  "version": 0
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+        "name": "string",
+        "price": 0.23
+      },
+      "quantity": 1
+    }
+  ]
+}
+```
+
+
+##### PUT /process Передача заказа в обработку
+
+
+```
+Example Request Value
+{
+  "id": "string",
+  "status": "NEW",
+  "version": 2
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0.23
+      },
+      "quantity": 1
+    }
+  ]
+}
+```
+
+
+```
+Example Response Value
+{
+  "id": "string",
+  "status": "IN_PROGRESS",
+  "version": 3
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+        "name": "string",
+        "price": 0.23
+      },
+      "quantity": 1
+    }
+  ]
+}
+```
+
+
+##### GET /get Получить текущее состояние заказа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  parameters:
+    orderId:
+      type: string
+      desc: id интересующего заказа
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+          - id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+- respCode: 401/Not authorized
+- respCode: 404/Order not Found
+
+```
+Example Response Value
+{
+  "id": "string",
+  "status": "COMPLETED",
+  "version": 0
+  "orderItems": [
+    {
+      "id": 0,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0
+      },
+      "quantity": 0
+    }
+  ]
+}
+```
+
+#### store (сервис учета товаров на складе)
 
