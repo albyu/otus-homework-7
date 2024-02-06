@@ -515,6 +515,66 @@ response:
 ##### POST /place —оздание заказа
 
 ```
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      orderItems:
+        type: array
+        desc: товарные позиции заказа 
+        - product:
+            id:
+              type: int
+              desc: идентификатор товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: верси€ объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+          - id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+- respCode: 401/Not authorized
+- respCode: 404/Product not found
+- respCode: 409/Inappropriate state of object for performing operation
+- respCode: 500/Authentication Server error
+```
+
+```
 Example Request Value
 {
   "id": "string",
@@ -681,6 +741,7 @@ Example Response Value
 
 ##### GET /get ѕолучить текущее состо€ние заказа
 
+```
 request: 
   headers:
     cookies: 
@@ -725,6 +786,7 @@ response:
               desc: количество товарных единиц в заказе
 - respCode: 401/Not authorized
 - respCode: 404/Order not Found
+```
 
 ```
 Example Response Value
