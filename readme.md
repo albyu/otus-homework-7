@@ -219,7 +219,6 @@
 
 ### 2. ќбща€ схема взаимодействи€ сервисов.
 
-
 ### 3. Ќазначение сервисов и их зона ответственности.
 
 #### auth (аутентификаци€ и авторизаци€)
@@ -320,6 +319,7 @@
 
 ##### GET /auth: запрос на подтвеждение авторизации
 
+```
 request: 
   headers:
     cookies: 
@@ -340,9 +340,14 @@ response:
         lastName:
           type: string
           desc: фамили€ пользовател€
-      example-value:      
+- respCode: 401/User not authorized
+- respCode: 403/Forbidden
+- respCode: 404/Not Found
+
 ```
-Example Value
+   
+```
+Response Example Value
 Model
 {
   "email": "string",
@@ -352,19 +357,16 @@ Model
   "username": "string"
 }
 ``` 
-- respCode: 401/User not authorized
-- respCode: 403/Forbidden
-- respCode: 404/Not Found
 
 ##### POST /login: запрос на вход в систему
 
+```
 request: 
   headers:
     cookies: 
       oldSessionId:
         type: string 
         desc: текущий идентификатор сессии клиента
-
   body:
     model:
       username:
@@ -374,12 +376,6 @@ request:
         type: string
         desc: пароль пользовател€
     example-value:
-```
-{
-  "password": "string",
-  "username": "string"
-}
-```
 response:  
 - respCode: 200/Success
     body:
@@ -399,10 +395,21 @@ response:
 	phone:
           type: string
           desc: номер телефона пользовател€
-      example-value:      
+- respCode: 400/Username and password should be provided
+- respCode: 401/Invalid login/password
+- respCode: 404/Not Found
 ```
-Example Value
-Model
+
+```
+Example Request Value
+{
+  "password": "string",
+  "username": "string"
+}
+```
+
+```
+Example Response Value
 {
   "email": "string",
   "firstName": "string",
@@ -412,13 +419,10 @@ Model
 }
 ``` 
   
-- respCode: 400/Username and password should be provided
-- respCode: 401/Invalid login/password
-- respCode: 404/Not Found
-
 
 ##### POST /register: «арегистрировать нового клиента
 
+```
 request: 
   body:
     model:
@@ -437,13 +441,6 @@ request:
       phone:
         type: string
         desc: номер телефона пользовател€ 
-    example-value:
-```
-{
-  "password": "string",
-  "username": "string"
-}
-```
 response:  
 - respCode: 200/Success
     body:
@@ -463,10 +460,20 @@ response:
        phone:
          type: string
          desc: номер телефона пользовател€ 
-      example-value:
+- respCode: 400/Username, password, email should be provided
+- respCode: 409/User already exists
 ```
-Example Value
-Model
+
+```
+Example Request Value
+{
+  "password": "string",
+  "username": "string"
+}
+```
+
+```
+Example Response Value
 {
   "email": "string",
   "firstName": "string",
@@ -475,11 +482,10 @@ Model
   "username": "string"
 }
 ``` 
-- respCode: 400/Username, password, email should be provided
-- respCode: 409/User already exists
 
 ##### GET /logout: «авершение пользовательской сессии
 
+```
 request: 
   headers:
     cookies: 
@@ -494,13 +500,7 @@ response:
         type: string 
         desc: пустой идентификатор сессии клиента
         value: "" 
-- respCode: 401/Not authorized
-  headers:
-    cookies: 
-      sessionId:
-        type: string 
-        desc: пустой идентификатор сессии клиента
-        value: ""
+```
 
 #### billing (локальный биллинг)
 
