@@ -452,7 +452,10 @@ request:
         desc: email пользователя
       phone:
         type: string
-        desc: номер телефона пользователя 
+        desc: номер телефона пользователя
+      password:
+        type: string
+        desc: пароль пользователя   
 response:  
 - respCode: 200/Success
     body:
@@ -487,8 +490,14 @@ response:
 ```
 Example Request Value
 {
-  "password": "string",
-  "username": "string"
+  {
+  "email": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "phone": "string",
+  "username": "string",
+  "password": "qwerty1234"
+
 }
 ```
 
@@ -526,9 +535,331 @@ response:
 
 #### delivery (CRM доставки)
 
+
 #### notification (сервис доставки уведомлений клиентам)
 
+##### Поток запросов на уведомления о подтверждении/ошибке подтверждения заказа (от orchestra)
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  username:
+    type: string
+    spec: Идентификатор клиента
+  response:
+    type: string
+    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
+  timestamp:
+    type: timestamp
+    spec: время окончания обработки  
+``` 
+
+##### Поток запросов на уведомления о совершении платежа/отмене платежа (от payment)
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  username:
+    type: string
+    spec: Идентификатор клиента  
+  requestType:
+    type: string
+    spec: Тип запроса (CHARGE/REVERSE)
+  tokenType:
+    type: string
+    spec: Тип средства оплаты (BANK_CARD/QR_PAY/GIFT_CARD/WALLET)
+  maskedTokenId:
+    type: string
+    spec: Маскированный ид средства платежа 
+  response:
+    type: string
+    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
+  errorMsg:
+    type: string
+    spec: Сведения об ошибке     
+  timestamp:
+    type: timestamp
+    spec: время (попытки) оплаты  
+``` 
+
+
+##### Поток запросов на уведомление о доставке (от delivery)
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  username:
+    type: string
+    spec: Идентификатор клиента  
+  pickupPointDelivery:
+    type: object
+    spec: Описание получения заказа в точке выдачи
+    pointId:
+      type: int 
+      spec: Идентификатор точки выдачи заказа
+    address: 
+      type: string
+      spec: Адрес точки выдачи заказа 	 
+    availDate:
+      type: date
+      spec: Дата доступности заказа
+  homeDelivery:
+    type: object
+    spec: Описание получения доставки заказа на дом 
+    homeAddress: 
+      type: string
+      spec: Адрес точки выдачи заказа 	
+    deliveryDate:
+      type: date
+      spec: Дата доставки  
+    timeSlot:
+      type: object
+      spec: временной слот доставки
+      beginTime:
+        type: time
+        spec: начало слота
+      endTime:
+        type: time
+        spec: окончание слота     
+  requestType:
+    type: string
+    spec: Тип запроса (CHARGE/REVERSE)
+  tokenType:
+    type: string
+    spec: Тип средства оплаты (BANK_CARD/QR_PAY/GIFT_CARD/WALLET)
+  maskedTokenId:
+    type: string
+    spec: Маскированный ид средства платежа 
+  response:
+    type: string
+    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
+  errorMsg:
+    type: string
+    spec: Сведения об ошибке     
+  timestamp:
+    type: timestamp
+    spec: время (попытки) оплаты  
+``` 
+
+
+##### Поток запросов на доставку данных платежной карты (от billing)      
+
+```
+format: JSON
+messageBody:
+  giftCardNumber
+    type: string
+    spec: номер подарочной карты  
+  doneeFirstName:
+    type: string
+    desc: имя получателя карты
+  doneeLastName:
+    type: string
+    desc: фамилия получателя карты
+  doneeEmail:
+    type: string
+    desc: email получателя карты
+``` 
+
+
+##### Поток запросов на создание учетной записи пользователя (от auth)
+
+```
+format: JSON
+messageBody:
+  username:
+    type: string
+    spec: Идентификатор клиента  
+  firstName:
+     type: string
+     desc: имя пользователя
+   lastName:
+     type: string
+     desc: фамилия пользователя
+   email:
+     type: string
+     desc: email пользователя
+   phone:
+     type: string
+     desc: номер телефона пользователя
+``` 
+
 #### orchestra (оркестратор согласования заказа)
+
+##### Поток заказов, требующих подтверждения, от order к orchestra
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  version:
+    type: int
+    spec: Версия объекта
+  userName:
+    type: string
+    spec: идентификатор клиента
+  orderItems:
+    type: array
+    desc: товарные позиции заказа 
+    - id:
+        type: int
+        desc: идентификатор товарной позиции
+      productId:
+        type: int
+        desc: идентификатор товара
+      productName:
+        type: string
+        desc: название товара  
+      quantity:
+        type: int
+        desc: количество товарных единиц в заказе     
+```
+
+Message Example:
+```
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "orderItems": [
+    {
+      "id": 1,
+      "productId": 2
+      "productName": "string",
+      "productPrice": 20.20      
+      "quantity": 0
+    }
+  ]
+}
+```
+
+
+
+##### Поток ответов на запросы подьверждений, от orchestra к order
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  version:
+    type: int
+    spec: Версия объекта
+  response:
+    type: string
+    spec: Результат выполнения (SUCCESS/FAIL)
+```
+
+Message Example:
+```
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "orderItems": [
+    {
+      "id": 1,
+      "productId": 2
+      "productName": "string",
+      "productPrice": 20.20      
+      "quantity": 0
+    }
+  ]
+}
+```
+
+
+##### Поток запросов на подтверждения от orchestra к payment, store, delivery
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  requestType:
+    type: string
+    spec: Тип запрашиваемой операции CONFIRM (подтверждение)/REVERSE(отмена)
+  confirmator:
+    type: string
+    spec: Код системы, у которой запрашиваем подтверждение (PAYMENT/STORE/DELIVERY)
+  orderItems:
+    type: array
+    desc: товарные позиции заказа 
+    - id:
+        type: int
+        desc: идентификатор товарной позиции
+      productId:
+        type: int
+        desc: идентификатор товара
+      productName:
+        type: string
+        desc: название товара  
+      quantity:
+        type: int
+        desc: количество товарных единиц в заказе     
+```
+
+Message Example:
+```
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "orderItems": [
+    {
+      "id": 1,
+      "productId": 2
+      "productName": "string",
+      "productPrice": 20.20      
+      "quantity": 0
+    }
+  ]
+}
+```
+
+
+##### Поток ответов на запросы подтверждений от payment, store, delivery к orchestra
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  requestType:
+    type: string
+    spec: Тип запрашиваемой операции CONFIRM (подтверждение)/REVERSE(отмена)
+  confirmator:
+    type: string
+    spec: Код системы, у которой запрашиваем подтверждение (PAYMENT/STORE/DELIVERY)
+  respone:
+    type: string
+    spec: Результат выполнения (SUCCESS/FAIL)
+
+```
+
+Message Example:
+```
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "response": "SUCCESS"
+}
+```
 
 #### order (сервис управления заказом)
 
@@ -705,7 +1036,7 @@ response:
 - respCode: 401/Not authorized
 - respCode: 404/Order not found
     body:
-     errorMessage:
+	     errorMessage:
        type: string
        desc: описание ошибки 
 - respCode: 404/Product not found
