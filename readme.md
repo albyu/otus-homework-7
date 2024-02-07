@@ -396,8 +396,20 @@ response:
           type: string
           desc: номер телефона пользователя
 - respCode: 400/Username and password should be provided
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 - respCode: 401/Invalid login/password
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 - respCode: 404/Not Found
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 ```
 
 ```
@@ -461,7 +473,15 @@ response:
          type: string
          desc: номер телефона пользователя 
 - respCode: 400/Username, password, email should be provided
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 - respCode: 409/User already exists
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 ```
 
 ```
@@ -570,8 +590,20 @@ response:
               desc: количество товарных единиц в заказе
 - respCode: 401/Not authorized
 - respCode: 404/Product not found
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 - respCode: 409/Inappropriate state of object for performing operation
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 - respCode: 500/Authentication Server error
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
 ```
 
 ```
@@ -614,9 +646,92 @@ Example Response Value
 ##### PUT /adjust Изменение заказа
 
 ```
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      version:
+        type: id
+        desc: идентификатор версии
+      orderItems:
+        type: array
+        desc: товарные позиции заказа 
+        - product:
+            id:
+              type: int
+              desc: идентификатор товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+          - id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+- respCode: 401/Not authorized
+- respCode: 404/Order not found
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+- respCode: 404/Product not found
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+- respCode: 409/Inappropriate state of object for performing operation
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+- respCode: 500/Authentication Server error
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+
+```
+
+```
 Example Request Value
 {
   "id": "string",
+  "status": "NEW",
+  "version": 1
   "orderItems": [
     {
       "id": 2,
@@ -653,10 +768,87 @@ Example Response Value
 ##### PUT /cancel Отмена заказа
 
 ```
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      version:
+        type: id
+        desc: идентификатор версии
+      orderItems:
+        type: array
+        desc: товарные позиции заказа 
+        - product:
+            id:
+              type: int
+              desc: идентификатор товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+          - id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+- respCode: 401/Not authorized
+- respCode: 404/Order not found
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+- respCode: 409/Inappropriate state of object for performing operation
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+- respCode: 500/Authentication Server error
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+
+```
+
+
+```
 Example Request Value
 {
   "id": "string",
-  "status": "CANCELED",
+  "status": "NEW",
   "version": 0
   "orderItems": [
     {
@@ -696,6 +888,81 @@ Example Response Value
 
 ##### PUT /process Передача заказа в обработку
 
+```
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      version:
+        type: id
+        desc: идентификатор версии
+      orderItems:
+        type: array
+        desc: товарные позиции заказа 
+        - product:
+            id:
+              type: int
+              desc: идентификатор товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+          - id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+- respCode: 401/Not authorized
+- respCode: 404/Order not found
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+- respCode: 409/Inappropriate state of object for performing operation
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+- respCode: 500/Authentication Server error
+    body:
+     errorMessage:
+       type: string
+       desc: описание ошибки 
+
+```
 
 ```
 Example Request Value
