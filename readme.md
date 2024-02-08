@@ -30,8 +30,7 @@
  1) название
  2) цену
  3) изображение
- 4) скидку
- 5) доступность в разных магазинах
+ 4) доступность в разных магазинах
 Когда клиент нажимает на карточку товара
 Тогда клиент переходит на страничку с описанием
 товара и кнопкой "Добавить в корзину"
@@ -51,8 +50,7 @@
  1) название
  2) цену
  3) изображение
- 4) скидку
- 5) доступность в разных магазинах
+ 4) доступность в разных магазинах
 Когда клиент нажимает на карточку товара
 Тогда клиент переходит на страничку с описанием
 товара и кнопкой "Добавить в корзину"
@@ -317,48 +315,7 @@
 
 #### auth (аутентификация и авторизация)
 
-##### GET /auth: запрос на подтвеждение авторизации
-
-```
-request: 
-  headers:
-    cookies: 
-      sessionId:
-        type: string 
-        desc: идентификатор сессии клиента
-
-response:  
-- respCode: 200/Success
-    body:
-      model:
-        username:
-          type: string
-          desc: идентификатор пользователя
-        fistName:
-          type: string
-          desc: имя пользователя
-        lastName:
-          type: string
-          desc: фамилия пользователя
-- respCode: 401/User not authorized
-- respCode: 403/Forbidden
-- respCode: 404/Not Found
-
-```
-   
-```
-Response Example Value
-Model
-{
-  "email": "string",
-  "firstName": "string",
-  "lastName": "string",
-  "phone": "string",
-  "username": "string"
-}
-``` 
-
-##### POST /login: запрос на вход в систему
+##### POST /login: запрос на вход в систему 
 
 ```
 request: 
@@ -531,147 +488,51 @@ response:
         value: "" 
 ```
 
-#### billing (локальный биллинг)
 
-#### delivery (CRM доставки)
-
-
-#### notification (сервис доставки уведомлений клиентам)
-
-##### Поток запросов на уведомления о подтверждении/ошибке подтверждения заказа (от orchestra)
+##### GET /auth: запрос на подтвеждение авторизации
 
 ```
-format: JSON
-messageBody:
-  orderId: 
-    type: string
-    spec: Идентификатор заказа
-  username:
-    type: string
-    spec: Идентификатор клиента
-  response:
-    type: string
-    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
-  timestamp:
-    type: timestamp
-    spec: время окончания обработки  
-``` 
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
 
-##### Поток запросов на уведомления о совершении платежа/отмене платежа (от payment)
-
-```
-format: JSON
-messageBody:
-  orderId: 
-    type: string
-    spec: Идентификатор заказа
-  username:
-    type: string
-    spec: Идентификатор клиента  
-  requestType:
-    type: string
-    spec: Тип запроса (CHARGE/REVERSE)
-  tokenType:
-    type: string
-    spec: Тип средства оплаты (BANK_CARD/QR_PAY/GIFT_CARD/WALLET)
-  maskedTokenId:
-    type: string
-    spec: Маскированный ид средства платежа 
-  response:
-    type: string
-    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
-  errorMsg:
-    type: string
-    spec: Сведения об ошибке     
-  timestamp:
-    type: timestamp
-    spec: время (попытки) оплаты  
-``` 
-
-
-##### Поток запросов на уведомление о доставке (от delivery)
+response:  
+- respCode: 200/Success
+    body:
+      model:
+        username:
+          type: string
+          desc: идентификатор пользователя
+        fistName:
+          type: string
+          desc: имя пользователя
+        lastName:
+          type: string
+          desc: фамилия пользователя
+- respCode: 401/User not authorized
+- respCode: 403/Forbidden
+- respCode: 404/Not Found
 
 ```
-format: JSON
-messageBody:
-  orderId: 
-    type: string
-    spec: Идентификатор заказа
-  username:
-    type: string
-    spec: Идентификатор клиента  
-  pickupPointDelivery:
-    type: object
-    spec: Описание получения заказа в точке выдачи
-    pointId:
-      type: int 
-      spec: Идентификатор точки выдачи заказа
-    address: 
-      type: string
-      spec: Адрес точки выдачи заказа 	 
-    availDate:
-      type: date
-      spec: Дата доступности заказа
-  homeDelivery:
-    type: object
-    spec: Описание получения доставки заказа на дом 
-    homeAddress: 
-      type: string
-      spec: Адрес точки выдачи заказа 	
-    deliveryDate:
-      type: date
-      spec: Дата доставки  
-    timeSlot:
-      type: object
-      spec: временной слот доставки
-      beginTime:
-        type: time
-        spec: начало слота
-      endTime:
-        type: time
-        spec: окончание слота     
-  requestType:
-    type: string
-    spec: Тип запроса (CHARGE/REVERSE)
-  tokenType:
-    type: string
-    spec: Тип средства оплаты (BANK_CARD/QR_PAY/GIFT_CARD/WALLET)
-  maskedTokenId:
-    type: string
-    spec: Маскированный ид средства платежа 
-  response:
-    type: string
-    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
-  errorMsg:
-    type: string
-    spec: Сведения об ошибке     
-  timestamp:
-    type: timestamp
-    spec: время (попытки) оплаты  
-``` 
-
-
-##### Поток запросов на доставку данных платежной карты (от billing)      
-
+   
 ```
-format: JSON
-messageBody:
-  giftCardNumber
-    type: string
-    spec: номер подарочной карты  
-  doneeFirstName:
-    type: string
-    desc: имя получателя карты
-  doneeLastName:
-    type: string
-    desc: фамилия получателя карты
-  doneeEmail:
-    type: string
-    desc: email получателя карты
+Response Example Value
+Model
+{
+  "email": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "phone": "string",
+  "username": "string"
+}
 ``` 
 
+##### Поток запросов через Message Broker на создание требуемых сущностей (от auth к billing, payment и notification) 
 
-##### Поток запросов на создание учетной записи пользователя (от auth)
+Format 1 на компонентной схеме
 
 ```
 format: JSON
@@ -693,9 +554,361 @@ messageBody:
      desc: номер телефона пользователя
 ``` 
 
+
+```
+Message example
+
+{
+  "username": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "phone": "string"  
+}
+
+```
+
+#### billing (локальный биллинг)
+
+##### GET /token/get: Получить сведения о средстве оплаты (кошельке, подарочной карте) 
+
+```
+request: 
+  parameters:
+    username:
+      type: string
+      desc: id клиента
+response:
+- respCode: 200/Success
+    body:
+      model:
+        username:
+          type: string
+          desc: id клиента        
+        tokens:
+          type: array
+          desc: Список средств платежа
+          id:
+            type: long
+            spec: ид средства платежа (в payment)           
+          tokenType:
+            type: string
+            spec: Тип средства оплаты (BANK_CARD/QR_PAY/GIFT_CARD/WALLET)
+          maskedTokenId:
+            type: string
+            spec: Маскированный ид средства платежа (номер карты) 
+          description:
+            type: string
+            spec: Описание            
+- respCode: 401/Not authorized
+- respCode: 404/Client not found
+```
+
+```
+Response Example Value
+
+{
+  "username": "string",
+  "tokens": [ 
+    {
+      "tokenType": "string",
+      "maskedTokenId": "string",
+      "description": "string"
+    }
+  ]
+}
+``` 
+
+
+##### POST /token/charge: Провести операцию по счету
+
+##### POST /trxn/get: Получить список операций по счету 
+
+##### POST /token/create: Сгенерировать новую подарочную карту
+
+
+
+#### delivery (CRM доставки)
+
+##### GET /points: Получить список точек доставки
+
+```
+request: 
+  parameters:
+    addressFilter:
+      type: string
+      desc: фильтр по адресу
+response:
+- respCode: 200/Success
+    body:
+      model:
+        pickupPoints:
+          type: array
+          desc: список точек доставки          
+          id:
+            type: int
+            desc: идентификатор точки
+          name:
+            type: string
+            desc: название точки
+          address:
+            type: string
+            desc: адрес точки
+
+- respCode: 401/Not authorized
+```
+
+```
+Example Response Value
+{
+  "pickupPoints": [
+    {
+        "id": 1,
+        "name": "string",
+        "address": "string"
+    }
+  ]
+}
+```
+
+##### GET /variants: Получить варианты доставки по указанному адресу
+
+```
+request: 
+  parameters:
+    address:
+      type: string
+      desc: требуемый адрес доставки
+response:
+- respCode: 200/Success
+    body:
+      model:
+        address:
+          type: string
+          desc: адрес доставки
+        variants:
+          type: array
+          desc: список вариантов доставки
+          companyName:
+            type: string
+            desc: имя компании
+          cost:
+            type: double
+            desc: адрес точки
+          estimatedDate:
+            type: date
+            desc: оценочное время доставки
+- respCode: 401/Not authorized
+```
+
+```
+Example Response Value
+{
+  "address": "string",
+  "variants": [
+    {
+        "companyName": 1,
+        "cost": 16.96,
+        "estimatedDate": "dd.mm.yyyy"
+    }
+  ]
+}
+```
+
+
+#### notification (сервис доставки уведомлений клиентам)
+
+##### Поток запросов через Message Broker на уведомления о подтверждении/ошибке подтверждения заказа (от orchestra)
+
+Format 2 на компонентной схеме
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  username:
+    type: string
+    spec: Идентификатор клиента
+  response:
+    type: string
+    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
+  timestamp:
+    type: timestamp
+    spec: время окончания обработки  
+``` 
+
+```
+Message example
+{
+  "orderId": "string",
+  "username": "string",
+  "response": "SUCCESS",
+  "timestamp": "timestamp",
+}
+
+```
+
+##### Поток запросов через Message Broker на уведомления о совершении платежа/отмене платежа (от payment)
+
+Format 3 на компонентной схеме
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  username:
+    type: string
+    spec: Идентификатор клиента  
+  requestType:
+    type: string
+    spec: Тип запроса (CHARGE/REVERSE)
+  tokenType:
+    type: string
+    spec: Тип средства оплаты (BANK_CARD/QR_PAY/GIFT_CARD/WALLET)
+  maskedTokenId:
+    type: string
+    spec: Маскированный ид средства платежа 
+  response:
+    type: string
+    spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
+  errorMsg:
+    type: string
+    spec: Сведения об ошибке     
+  timestamp:
+    type: timestamp
+    spec: время (попытки) оплаты  
+``` 
+
+```
+Message example
+{
+  "orderId": "string",
+  "username": "string",
+  "requestType": "CHARGE"
+  "tokenType": "BANK_CARD",
+  "maskedTokenId": "string",
+  "response": "SUCCESS",
+  "errorMsg": "string",
+  "timestamp": "timestamp"
+
+}
+
+```
+
+
+
+##### Поток запросов через Message Broker на уведомление о доставке (от delivery)
+
+Format 4 на компонентной схеме
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  username:
+    type: string
+    spec: Идентификатор клиента  
+  pickupPointDelivery:
+    type: object
+    spec: Описание получения заказа в точке выдачи
+    pointId:
+      type: int 
+      spec: Идентификатор точки выдачи заказа
+    address: 
+      type: string
+      spec: Адрес точки выдачи заказа 	 
+    deliveryDate:
+      type: date
+      spec: Дата доступности заказа
+  homeDelivery:
+    type: object
+    spec: Описание получения доставки заказа на дом 
+    homeAddress: 
+      type: string
+      spec: Адрес точки выдачи заказа 	
+    deliveryDate:
+      type: date
+      spec: Дата доставки  
+    timeSlot:
+      type: object
+      spec: временной слот доставки
+      beginTime:
+        type: time
+        spec: начало слота
+      endTime:
+        type: time
+        spec: окончание слота     
+  timestamp:
+    type: timestamp
+    spec: время (попытки) оплаты  
+``` 
+
+```
+Message example
+{
+  "orderId": "string",
+  "username": "string",
+  "pickupPointDelivery": {
+    "pointId": 120,
+    "address": "string",
+    "deliveryDate": "dd.mm.yyyy"
+  }
+  "homeDelivery": {
+    "homeAddress: "string",
+    "deliveryDate: "dd.mm.yyyy",
+    "timeSlot": {
+      "beginTime": "13:00",
+      "endTime": "15:00"
+    }
+  }
+  "timestamp": "timestamp"
+}
+
+```
+
+
+##### Поток запросов через Message Broker на доставку данных подарочной карты (от billing)      
+
+Format 5 на компонентной схеме
+
+```
+format: JSON
+messageBody:
+  giftCardNumber
+    type: string
+    spec: номер подарочной карты  
+  granteeFirstName:
+    type: string
+    desc: имя получателя карты
+  granteeLastName:
+    type: string
+    desc: фамилия получателя карты
+  granteeEmail:
+    type: string
+    desc: email получателя карты
+``` 
+
+```
+Message example:
+{
+  "giftCardNumber": "string",
+  "granteeFirstName": "string",
+  "granteeLastName": "string",
+  "granteeEmail": "string"
+}
+```
+
 #### orchestra (оркестратор согласования заказа)
 
 ##### Поток заказов, требующих подтверждения, от order к orchestra
+
+Format 6 на компонентной схеме
 
 ```
 format: JSON
@@ -726,8 +939,8 @@ messageBody:
         desc: количество товарных единиц в заказе     
 ```
 
-Message Example:
 ```
+Message Example:
 {
   "orderId": "string",
   "requestType": "CONFIRM",
@@ -748,6 +961,8 @@ Message Example:
 
 ##### Поток ответов на запросы подьверждений, от orchestra к order
 
+Format 7 на компонентной схеме
+
 ```
 format: JSON
 messageBody:
@@ -762,8 +977,8 @@ messageBody:
     spec: Результат выполнения (SUCCESS/FAIL)
 ```
 
-Message Example:
 ```
+Message Example:
 {
   "orderId": "string",
   "requestType": "CONFIRM",
@@ -781,7 +996,9 @@ Message Example:
 ```
 
 
-##### Поток запросов на подтверждения от orchestra к payment, store, delivery
+##### Поток запросов через Message Broker на подтверждения от orchestra к payment, store, delivery
+
+Format 8 на компонентной схеме
 
 ```
 format: JSON
@@ -812,8 +1029,8 @@ messageBody:
         desc: количество товарных единиц в заказе     
 ```
 
-Message Example:
 ```
+Message Example:
 {
   "orderId": "string",
   "requestType": "CONFIRM",
@@ -833,6 +1050,8 @@ Message Example:
 
 ##### Поток ответов на запросы подтверждений от payment, store, delivery к orchestra
 
+Format 9 на компонентной схеме
+
 ```
 format: JSON
 messageBody:
@@ -845,14 +1064,15 @@ messageBody:
   confirmator:
     type: string
     spec: Код системы, у которой запрашиваем подтверждение (PAYMENT/STORE/DELIVERY)
-  respone:
+  response:
     type: string
     spec: Результат выполнения (SUCCESS/FAIL)
 
 ```
 
-Message Example:
 ```
+Message Example:
+
 {
   "orderId": "string",
   "requestType": "CONFIRM",
@@ -860,6 +1080,89 @@ Message Example:
   "response": "SUCCESS"
 }
 ```
+
+##### Поток запросов через Message Broker на открытие подарочной карты от orchestra к billing
+
+Format 10 на компонентной схеме
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  requestType:
+    type: string
+    spec: Тип запрашиваемой операции OPEN(открыть)/CLOSE(закрыть)
+  cards:
+    type: array
+    desc: список подарочных карт
+    - id:
+        type: int
+        desc: идентификатор карты в списке
+      balance:
+        type: double
+        desc: баланс подарочной карты
+      grantee:
+        type: object
+        desc: сведения об одаряемом
+        firstName:
+          type: string
+          desc: имя получателя карты
+        lastName:
+          type: string
+          desc: фамилия получателя карты
+        email:
+          type: string
+          desc: email получателя карты         
+```
+
+```
+Message Example:
+{
+  "orderId": "string",
+  "requestType": "OPEN",
+  "cards": [
+    {
+      "id": 1,
+      "balance": 2,
+      "grantee": 
+       {
+        "firsName": "string",      
+        "lastName": "string",
+        "email": "string"
+    }
+  ]
+}
+```
+##### Поток запросов через Message Broker c результатами открытия подарочной карты от orchestra к billing
+
+Format 11 на компонентной схеме
+
+```
+format: JSON
+messageBody:
+  orderId: 
+    type: string
+    spec: Идентификатор заказа
+  requestType:
+    type: string
+    spec: Тип запрошенной операции OPEN(открыть)/CLOSE(закрыть)
+  response:
+    type: string
+    spec: Результат выполнения (SUCCESS/FAIL)
+
+```
+
+```
+Message Example:
+{
+  "orderId": "string",
+  "requestType": "OPEN",
+  "response": "SUCCESS"
+}
+```
+
 
 #### order (сервис управления заказом)
 
@@ -1406,5 +1709,88 @@ Example Response Value
 }
 ```
 
+#### payment (сервис учета товаров на складе)
+
+#### payment (сервис совершения платежей)
+
+- управляет сохраненными средствами платежа клиента (банковские карты, подарочные карты);
+- выполняет привязку подарочных карт к клиенту по запросу клиента;
+- по запросу от клиента формирует списание с банковского счета клиента (через bank-api) для:
+  - оплаты заказа;
+  - пополнения кошелька клиента;
+- по запросу от клиента формирует списание c кошелька или подарочной карты клиента (через billing);
+- по запросу от orchestra выполняет отмену совершенного платежа (в рамках отката распределенной транзакции)
+- формирует запросы на уведомление для notification;
+
+##### GET /tokens/get Получение списка средств платежа клиента
+
+##### POST /tokens/add Добавление средства платежа
+
+##### DELETE /tokens/delete Удаление средства платежа
+
+##### POST /pay Выполнение платежа
+
+##### POST /activate Активация подарочной карты 
+
+
 #### store (сервис учета товаров на складе)
+
+##### GET /get Получение количества единиц товара на складах
+
+```
+request: 
+  parameters:
+    productId:
+      type: int
+      desc: идентификатор интересующего продукта
+response:
+- respCode: 200/Success
+    body:
+      model:
+        productId:
+          type: int
+          desc: идентификатор продукта
+        productPlaces:
+          type: array
+          desc: количества товара на каждом из складов
+          - store:
+              type: object
+              desc: описание склада              
+              id:
+                type: int
+                desc: идентификатор склада
+              name:
+                type: string
+                desc: название склада
+              address:
+                type: string
+                desc: адрес склада
+            quantity:
+              type: int
+              desc: количество товара на складе
+- respCode: 401/Not authorized
+- respCode: 404/Product not Found
+
+```
+
+```
+Example Response Value
+{
+  "productId": "string",
+  "productPlaces": [
+    {
+      "store": {
+        "id": 1,
+        "name": "string",
+        "address": "string"
+      },
+      "quantity": 2
+    }
+  ]
+}
+
+```
+
+
+
 
