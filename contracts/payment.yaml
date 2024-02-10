@@ -1,0 +1,583 @@
+#### payment (сервис совершения платежей)
+
+##### GET payment/token/get Получение списка привязанных средств платежа клиента
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+response:
+- respCode: 200/Success
+    body:
+      model:
+        clientId:
+          type: long
+          desc: ид клиента
+        version:
+          type: long
+          desc: версия объекта
+        tokens:
+          type: array
+          desc: Список привязанных средств платежа
+        - internalTokenId:
+            type: long
+            desc: ид средства платежа в payment           
+          tokenType:
+            type: string
+            desc: Тип средства оплаты (BANK_CARD/WALLET)
+          externalTokenId:
+            type: string
+            desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
+          balance:
+            type: double
+            desc: Остаток на счете (для WALLET) 
+          description:
+            type: string
+            desc: Описание, заданное пользователем       
+      example-value: |
+{
+  "clientId": "string",
+  "version": 1,
+  "tokens": [ 
+    {
+      "tokenType": "BANK_CARD",
+      "balance": 12.12,
+      "maskedTokenId": "string",
+      "description": "string"
+    }
+  ]
+}
+                  
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 404/Not Found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### PUT payment/token/adjust Добавление/удаление/редактирование средства платежа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      clientId:
+        type: long
+        desc: ид клиента
+      version:
+        type: long
+        desc: версия объекта
+      tokens:
+        type: array
+        desc: Отредактированный список привязанных средств платежа
+      - internalTokenId:
+          type: long
+          desc: ид средства платежа в payment           
+        tokenType:
+          type: string
+          desc: Тип средства оплаты (BANK_CARD/WALLET)
+        externalTokenId:
+          type: string
+          desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
+        description:
+          type: string
+          desc: Описание, заданное пользователем       
+      example-value: |
+{
+  "clientId": "string",
+  "version": 1,
+  "tokens": [ 
+    {
+      "tokenType": "BANK_CARD",
+      "balance": 12.12,
+      "maskedTokenId": "string",
+      "description": "string"
+    }
+  ]
+}
+response:
+- respCode: 200/Success
+    body:
+      model:
+        clientId:
+          type: long
+          desc: ид клиента
+        version:
+          type: long
+          desc: версия объекта
+        tokens:
+          type: array
+          desc: Список привязанных средств платежа
+        - internalTokenId:
+            type: long
+            desc: ид средства платежа в payment           
+          tokenType:
+            type: string
+            desc: Тип средства оплаты (BANK_CARD/WALLET)
+          externalTokenId:
+            type: string
+            desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
+          balance:
+            type: double
+            desc: Остаток на счете (для WALLET) 
+          description:
+            type: string
+            desc: Описание, заданное пользователем       
+      example-value: |
+{
+  "clientId": "string",
+  "version": 1,
+  "tokens": [ 
+    {
+      "tokenType": "BANK_CARD",
+      "balance": 12.12,
+      "maskedTokenId": "string",
+      "description": "string"
+    }
+  ]
+}
+                  
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 404/Not Found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 409/Conflict
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### GET /payment/token/gettrxn: Получить список операций по токену
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  parameters:
+    internalTokenId:
+      type: long
+      desc: внутренний Id средства платежа  
+    externalTokenId:
+      type: long
+      desc: внешний Id средства платежа  
+response:
+- respCode: 200/Success
+    body:
+      model:
+        token:
+          type: object
+          desc: токен, по которому выполнялась оплата            
+          internalTokenId:
+            type: long
+            desc: ид средства платежа в payment           
+          tokenType:
+            type: string
+            desc: Тип средства оплаты (BANK_CARD/WALLET)
+          externalTokenId:
+            type: string
+            desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
+          description:
+            type: string
+            desc: Описание, заданное пользователем                              
+        transactions: 
+          type: array
+          desc: список транзакций (попыток оплаты)
+         -
+          externalId:
+            type: string
+            desc: идентификатор внешней транзакции
+          internalId:
+            type: long
+            desc: идентификатор внутренней транзакции
+          result:
+            type: object
+            desc: результат оплаты ("SUCCESS", "NOT_SUFFICIENT_FUNDS", etc)
+          timestamp:
+            type: timestamp
+            desc: время выполненения операции
+      example-value: |
+{
+ "token": {
+   "internalTokenId": 
+   "tokenType":
+   "externalTokenId":
+   "description": 
+ }
+ "transactions": [
+   {
+    "externalId": "string"
+    "internalId": 123,
+    "result": "SUCCESS",
+    "timestamp": "timestamp"   
+   } 
+ ]
+}      
+                       
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 404/Not Found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 409/Conflict
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+
+
+##### GET payment/order/get Получить статус оплаты заказа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  parameters:
+    orderId:
+      type: string
+      desc: идентификатор заказа
+response:
+- respCode: 200/Success
+    body:
+      model:
+        orderId:
+          type: string
+          desc: идентификатор заказа
+        status:
+          type: string
+          desc: статус платежа (SUCCESS, PENDING, DECLINE)
+        - transactions: 
+          type: array
+          desc: список транзакций (попыток оплаты)
+            token:
+              type: object
+              desc: токен, по которому выполнялась оплата            
+              internalTokenId:
+                type: long
+                desc: ид средства платежа в payment           
+              tokenType:
+                type: string
+                desc: Тип средства оплаты (BANK_CARD/WALLET)
+              externalTokenId:
+                type: string
+                desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
+              description:
+                type: string
+                desc: Описание, заданное пользователем                            
+            externalId:
+              type: string
+              desc: идентификатор внешней транзакции
+            internalId:
+              type: long
+              desc: идентификатор внутренней транзакции
+            result:
+              type: object
+              desc: результат оплаты ("SUCCESS", "NOT_SUFFICIENT_FUNDS", etc)
+            timestamp:
+              type: timestamp
+              desc: время выполненения операции  
+      example-value: |
+{
+   "orderId": "string",
+   "status": "SUCCESS"
+   "transactions": [
+    {  
+     "token": {
+       "internalTokenId": 1,
+       "tokenType": "BANK_CARD",
+       "externalTokenId": "string"
+       "description": "string"
+     }
+     "externalId": "string"
+     "internalId": 1234
+     "result": "SUCCESS"
+     "timestamp": "timestamp"
+    }
+   ]
+}      
+                  
+- respCode: 401/Not authorized
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 404/Not Found
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### POST /payment/order/pay Выполнение платежа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      amount:
+        type: long
+        desc: сумма платежа
+      source:     
+        type: object
+        desc: источник средств платежа        
+        tokenType:
+          type: string
+          desc: Тип средства оплаты (QR_CODE/BANK_CARD/WALLET)        
+        savedToken:
+          type: object
+          desc: Описание привязанного средства платежа (если используется привязанное средства платежа)
+          internalTokenId:
+            type: long
+            desc: ид средства платежа в payment           
+          tokenType:
+            type: string
+            desc: Тип средства оплаты (BANK_CARD/WALLET)
+          externalTokenId:
+            type: string
+            desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
+          description:
+            type: string
+            desc: Описание, заданное пользователем                            
+      destination:
+        type: object
+        desc: назначение средств платежа              
+        payType: 
+          type: string
+          desc: тип платежа (ORDER - оплата заказа/CREDIT - пополнение кошелька)
+        orderId: 
+          type: string
+          desc: идентификатор заказа                 
+    example-value: |
+{
+ "amount": 123.12
+ "source": {
+   "tokenType": "BANK_CARD",
+   "savedToken": {
+     "internalTokenId": 123, 
+     "tokenType": "BANK_CARD",
+     "externalTokenId": "string",
+     "description": "string"
+   }
+ },
+ "destination": {
+   "payType": "ORDER",
+   "orderId": "string"
+ }
+}    
+response:
+- respCode: 200/Success
+    body:
+      model:    
+        amount:
+          type: long
+          desc: сумма платежа
+        orderId:
+          type: string
+          desc: идентификатор клиента
+        response:
+          type: string
+          desc: результат авторизации (SUCCESS, INSUFFICIENT_FUNDS, NO_ACCOUNT - для внутреннего кошелька, PENDING - для оплаты по внешнему кошельку) 
+        internalTransactionId:
+          type: long
+          desc: Id внутренней транзакции (если оплата делалась по внутреннему кошельку)
+        externalPayLink:
+          type: string
+          desc: Платежная ссылка для выполнения оплаты в bank-api (если оплата делается по внешнему средству платежа)     
+    example-value: |
+{
+  "amount": 123.12,
+  "orderId": "BANK_CARD",
+  "response": "PENDING",
+  "internalTransactionId": 123,
+  "externalPayLink": "paylink"
+}    
+             
+- respCode: 401/Not authorized
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 404/Not Found
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 409/Conflict
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+#### POST /payment/order/payresult Endpoint для bank-api для возврата результатов платежа в payment
+request: 
+  body:
+    model:
+      amount:
+        type: long
+        desc: сумма платежа
+      orderId: 
+        type: string
+        desc: идентификатор заказа                 
+      response:
+        type: string
+        desc: результат авторизации (SUCCESS, INSUFFICIENT_FUNDS, EXTERNAL_DECLINE, ... ) 
+      tokenType:
+        type: string
+        desc: Тип средства оплаты (BANK_CARD/QR_PAY)
+      externalTokenId:
+        type: string
+        desc: Маскированный ид средства платежа (номер карты) 
+      externalTransactionId:
+        type: string
+        desc: Id внешней транзакции
+    example-value: |
+{
+  "amount": 123.12,
+  "orderId": "string",
+  "response": "SUCCESS",
+  "tokenType": "BANK_CARD",
+  "externalTokenId": "string"
+  "externalTransactionId": "string"
+}
+           
+response:
+- respCode: 200/Success
+    body:
+      model: 
+        statusMessage:
+          type: string
+          desc: статус обработки (ACCEPTED)
+      example-value: |
+{
+ "errorMessage": "string"
+} 
+  
+- respCode: 404/Order not Found
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 409/Conflict
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+
+
+
+
+
+

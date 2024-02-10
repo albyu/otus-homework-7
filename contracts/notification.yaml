@@ -1,0 +1,151 @@
+#### notification (сервис доставки уведомлений клиентам)
+
+##### Поток запросов через Message Broker на уведомления о подтверждении/ошибке подтверждения заказа (от orchestra)
+##### Format 2 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    orderId: 
+      type: string
+      spec: Идентификатор заказа
+    clientId:
+      type: string
+      spec: Идентификатор клиента
+    response:
+      type: string
+      spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
+    timestamp:
+      type: timestamp
+      spec: время окончания обработки  
+  example-value: |
+{
+  "orderId": "string",
+  "clientId": "string",
+  "response": "SUCCESS",
+  "timestamp": "timestamp",
+}
+
+##### Поток запросов через Message Broker на уведомления о совершении платежа/отмене платежа (от payment)
+##### Format 3 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    orderId: 
+      type: string
+      spec: Идентификатор заказа
+    clientId:
+      type: string
+      spec: Идентификатор клиента  
+    requestType:
+      type: string
+      spec: Тип запроса (CHARGE/REVERSE)
+    tokenType:
+      type: string
+      spec: Тип средства оплаты (BANK_CARD/QR_PAY/GIFT_CARD/WALLET)
+    maskedTokenId:
+      type: string
+      spec: Маскированный ид средства платежа 
+    response:
+      type: string
+      spec: Результат обработки совершенного заказа (SUCCESS/FAIL)
+    errorMsg:
+      type: string
+      spec: Сведения об ошибке     
+    timestamp:
+      type: timestamp
+      spec: время оплаты/попытки оплаты 
+  example-value: |
+{
+  "orderId": "string",
+  "clientId": "string",
+  "requestType": "CHARGE"
+  "tokenType": "BANK_CARD",
+  "maskedTokenId": "string",
+  "response": "SUCCESS",
+  "errorMsg": "string",
+  "timestamp": "timestamp"
+}
+
+##### Поток запросов через Message Broker на уведомление о доставке (от delivery)
+##### Format 4 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    orderId: 
+      type: string
+      spec: Идентификатор заказа
+    clientId:
+      type: string
+      spec: Идентификатор клиента  
+    pickupPointDelivery:
+      type: object
+      spec: Описание получения заказа в точке выдачи
+      pointId:
+        type: int 
+        spec: Идентификатор точки выдачи заказа
+      address: 
+        type: string
+        spec: Адрес точки выдачи заказа 	 
+      deliveryDate:
+        type: date
+        spec: Дата доступности заказа
+    homeDelivery:
+      type: object
+      spec: Описание получения доставки заказа на дом 
+      homeAddress: 
+        type: string
+        spec: Адрес точки выдачи заказа 	
+      deliveryDate:
+        type: date
+        spec: Дата доставки  
+      timeSlot:
+        type: object
+        spec: временной слот доставки
+        beginTime:
+          type: time
+          spec: начало слота
+        endTime:
+          type: time
+          spec: окончание слота     
+    timestamp:
+      type: timestamp
+      spec: время формирования 
+  example-value: |
+{
+  "orderId": "string",
+  "clientId": "string",
+  "pickupPointDelivery": {
+    "pointId": 120,
+    "address": "string",
+    "deliveryDate": "dd.mm.yyyy"
+  }
+  "homeDelivery": {
+    "homeAddress": "string",
+    "deliveryDate": "dd.mm.yyyy",
+    "timeSlot": {
+      "beginTime": "13:00",
+      "endTime": "15:00"
+    }
+  }
+  "timestamp": "timestamp"
+}
+
+
+
+  
+  
+  
+  
+
+
+
+  
+
+  
+  
+
+  
+  

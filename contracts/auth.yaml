@@ -1,0 +1,272 @@
+#### auth (аутентификация и авторизация)
+
+##### POST auth/register: Зарегистрировать нового клиента
+
+request: 
+  body:
+    model:
+      clientId:
+        type: string
+        desc: идентификатор клиента
+      fistName:
+        type: string
+        desc: имя клиента
+      lastName:
+        type: string
+        desc: фамилия клиента
+      email:
+        type: string
+        desc: email клиента
+      phone:
+        type: string
+        desc: номер телефона клиента
+      password:
+        type: string
+        desc: пароль клиента   
+    example-value: |
+{
+  "email": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "phone": "string",
+  "clientId": "string",
+  "password": "qwerty1234"
+}
+response:  
+- respCode: 200/Success
+    body:
+      model:
+       clientId:
+         type: string
+         desc: идентификатор клиента
+       fistName:
+         type: string
+         desc: имя клиента
+       lastName:
+         type: string
+         desc: фамилия клиента
+       email:
+         type: string
+         desc: email клиента
+       phone:
+         type: string
+         desc: номер телефона клиента 
+      example-value: |
+{
+  "email": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "phone": "string",
+  "clientId": "string"
+}
+      
+- respCode: 400/clientId, password, email should be provided
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+     
+- respCode: 409/User already exists
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### POST auth/login: запрос на вход в систему 
+
+request: 
+  headers:
+    cookies: 
+      oldSessionId:
+        type: string 
+        desc: текущий идентификатор сессии клиента
+  body:
+    model:
+      clientId:
+        type: string
+        desc: идентификатор клиента
+      password:
+        type: string
+        desc: пароль клиента
+    example-value: |
+{
+  "password": "string",
+  "clientId": "string"
+}
+response:  
+- respCode: 200/Success
+    body:
+      model:
+        clientId:
+          type: string
+          desc: идентификатор клиента
+        fistName:
+          type: string
+          desc: имя клиента
+        lastName:
+          type: string
+          desc: фамилия клиента
+        email:
+          type: string
+          desc: email клиента
+        phone:
+          type: string
+          desc: номер телефона клиента
+      example-value: |
+{
+  "email": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "phone": "string",
+  "clientId": "string"
+}                             
+- respCode: 400/clientId and password should be provided
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+       example-value: |
+{
+ "errorMessage": "string"
+}       
+- respCode: 401/Invalid login/password
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+        example-value: |       
+{
+ "errorMessage": "string"
+}       
+         
+- respCode: 404/Not Found
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+        example-value: |       
+{
+ "errorMessage": "string"
+}       
+
+
+##### GET auth/logout: Завершение пользовательской сессии
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+response:
+- respCode: 200/Success
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: пустой идентификатор сессии клиента        
+
+
+##### GET auth/check: внутренний запрос на подтвеждение авторизации
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+response:  
+- respCode: 200/Success
+    body:
+      model:
+        clientId:
+          type: string
+          desc: идентификатор клиента
+        fistName:
+          type: string
+          desc: имя клиента
+        lastName:
+          type: string
+          desc: фамилия клиента
+      example-value: |
+{
+  "email": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "phone": "string",
+  "clientId": "string"
+}      
+- respCode: 401/User not authorized
+    body:
+     model:
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+- respCode: 403/Forbidden
+    body:
+     model:
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+- respCode: 404/Not Found
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### Поток запросов через Message Broker на создание требуемых сущностей (от auth к billing, payment и notification) 
+##### Format 1 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    clientId:
+      type: string
+      spec: Идентификатор клиента  
+    firstName:
+      type: string
+      desc: имя клиента
+    lastName:
+      type: string
+      desc: фамилия клиента
+    email:
+      type: string
+      desc: email клиента
+    phone:
+      type: string
+      desc: номер телефона клиента
+  example-value: |
+{
+  "clientId": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "phone": "string"  
+}
+    

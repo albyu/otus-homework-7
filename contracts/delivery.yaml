@@ -1,0 +1,104 @@
+#### delivery (менеджер доставки)
+##### GET /delivery/pickup: Получить список точек доставки
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  parameters:
+    addressFilter:
+      type: string
+      desc: фильтр по адресу
+response:
+- respCode: 200/Success
+    body:
+      model:
+        pickupPoints:
+          type: array
+          desc: список точек доставки          
+          id:
+            type: int
+            desc: идентификатор точки
+          name:
+            type: string
+            desc: название точки
+          address:
+            type: string
+            desc: адрес точки
+      example-value: |
+{
+  "pickupPoints": [
+    {
+        "id": 1,
+        "name": "string",
+        "address": "string"
+    }
+  ]
+}
+      
+- respCode: 401/Not authorized
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### GET /delivery/options: Получить варианты доставки по указанному адресу
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента  
+  parameters:
+    address:
+      type: string
+      desc: требуемый адрес доставки
+response:
+- respCode: 200/Success
+    body:
+      model:
+        address:
+          type: string
+          desc: адрес доставки
+        options:
+          type: array
+          desc: список вариантов доставки
+          - companyName:
+              type: string
+              desc: имя компании
+            cost:
+              type: double
+              desc: стоимость доставки
+            estimatedDate:
+              type: date
+              desc: оценочное время доставки
+      example-value: |
+{
+  "address": "string",
+  "options": [
+    {
+        "companyName": 1,
+        "cost": 16.96,
+        "estimatedDate": "dd.mm.yyyy"
+    }
+  ]
+}
+- respCode: 401/Not authorized
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+

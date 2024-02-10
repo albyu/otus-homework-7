@@ -1,0 +1,1068 @@
+#### order (сервис управления заказом)
+##### POST /order/place Создание заказа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      orderItems:
+        type: array
+        desc: товарные позиции заказа 
+      - 
+          product:
+            type: object
+            desc: продукт в заказе
+            id:
+              type: int
+              desc: идентификатор товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
+            
+      delivery:      
+        pickupPoint:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          id:
+            type: int
+            desc: идентификатор точки доставки
+          name:
+            type: string
+            desc: название точки доставки
+          address:
+            type: string
+            desc: адрес точки доставки
+        homeDelivery:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          companyName:
+            type: string
+            desc: имя компании
+          cost:
+            type: double
+            desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+      },
+      "quantity": 1
+    }
+  ], 
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  } 
+}
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+        - 
+            id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              type: object
+              desc: продукт в заказе
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+        delivery:      
+          pickupPoint:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            id:
+              type: int
+              desc: идентификатор точки доставки
+            name:
+              type: string
+              desc: название точки доставки
+            address:
+              type: string
+              desc: адрес точки доставки
+          homeDelivery:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            companyName:
+              type: string
+              desc: имя компании
+            cost:
+              type: double
+              desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "status": "NEW",
+  "version": 0
+  "orderItems": [
+    {
+      "id": 0,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0
+      },
+      "quantity": 0
+    }
+  ],
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  }   
+}    
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+         
+- respCode: 404/Not found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 409/Inappropriate state of object for performing operation
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 500/Authentication Server error
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### PUT /order/adjust Изменение заказа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      version:
+        type: int
+        desc: версия объекта                
+      orderItems:
+        type: array
+        desc: товарные позиции заказа 
+      - 
+          product:
+            type: object
+            desc: заказанный продукт
+            id:
+              type: int
+              desc: идентификатор товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
+            
+      delivery:      
+        pickupPoint:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          id:
+            type: int
+            desc: идентификатор точки доставки
+          name:
+            type: string
+            desc: название точки доставки
+          address:
+            type: string
+            desc: адрес точки доставки
+        homeDelivery:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          companyName:
+            type: string
+            desc: имя компании
+          cost:
+            type: double
+            desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "version": 0,
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+      },
+      "quantity": 1
+    }
+  ], 
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  } 
+}
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+        - 
+            id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              type: object
+              desc: продукт в заказе
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+        delivery:      
+          pickupPoint:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            id:
+              type: int
+              desc: идентификатор точки доставки
+            name:
+              type: string
+              desc: название точки доставки
+            address:
+              type: string
+              desc: адрес точки доставки
+          homeDelivery:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            companyName:
+              type: string
+              desc: имя компании
+            cost:
+              type: double
+              desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "status": "NEW",
+  "version": 1,
+  "orderItems": [
+    {
+      "id": 0,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0
+      },
+      "quantity": 0
+    }
+  ],
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  }   
+}    
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+         
+- respCode: 404/Not found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 409/Inappropriate state of object for performing operation
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 500/Authentication Server error
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### PUT /order/cancel Отмена заказа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      version:
+        type: int
+        desc: версия объекта        
+      orderItems:
+        type: array
+        desc: товарные позиции заказа 
+      - 
+          product:
+            type: object
+            desc: продукт в заказе
+            id:
+              type: int
+              desc: идентификатор товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
+            
+      delivery:      
+        pickupPoint:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          id:
+            type: int
+            desc: идентификатор точки доставки
+          name:
+            type: string
+            desc: название точки доставки
+          address:
+            type: string
+            desc: адрес точки доставки
+        homeDelivery:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          companyName:
+            type: string
+            desc: имя компании
+          cost:
+            type: double
+            desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "version": 0,
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+      },
+      "quantity": 1
+    }
+  ], 
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  } 
+}
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+        - 
+            id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              type: object
+              desc: продукт в заказе
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+        delivery:      
+          pickupPoint:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            id:
+              type: int
+              desc: идентификатор точки доставки
+            name:
+              type: string
+              desc: название точки доставки
+            address:
+              type: string
+              desc: адрес точки доставки
+          homeDelivery:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            companyName:
+              type: string
+              desc: имя компании
+            cost:
+              type: double
+              desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "version": 1,
+  "status": "CANCEL",
+  "orderItems": [
+    {
+      "id": 0,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0
+      },
+      "quantity": 0
+    }
+  ],
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  }   
+}    
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+         
+- respCode: 404/Not found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 409/Inappropriate state of object for performing operation
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 500/Authentication Server error
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### PUT /order/process Передача заказа в обработку
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  body:
+    model:
+      id:
+        type: string
+        desc: идентификатор заказа
+      version:
+        type: int
+        desc: версия объекта        
+      orderItems:      
+        type: array
+        desc: товарные позиции заказа 
+      -
+        product:
+          type: object
+          desc: продукт в заказе
+          id:
+            type: int
+            desc: идентификатор товара
+        quantity:
+          type: int
+          desc: количество товарных единиц в заказе            
+      delivery:      
+        pickupPoint:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          id:
+            type: int
+            desc: идентификатор точки доставки
+          name:
+            type: string
+            desc: название точки доставки
+          address:
+            type: string
+            desc: адрес точки доставки
+        homeDelivery:
+          type: object
+          spec: описание точки доставки, куда надо доставить заказ
+          companyName:
+            type: string
+            desc: имя компании
+          cost:
+            type: double
+            desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "version": 1,
+  "orderItems": [
+    {
+      "id": 1,
+      "product": {
+        "id": 1,
+      },
+      "quantity": 1
+    }
+  ], 
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  } 
+}
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+          - id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+        delivery:      
+          pickupPoint:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            id:
+              type: int
+              desc: идентификатор точки доставки
+            name:
+              type: string
+              desc: название точки доставки
+            address:
+              type: string
+              desc: адрес точки доставки
+          homeDelivery:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            companyName:
+              type: string
+              desc: имя компании
+            cost:
+              type: double
+              desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "version": 2,
+  "status": "IN_PROGRESS",  
+  "orderItems": [
+    {
+      "id": 0,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0
+      },
+      "quantity": 0
+    }
+  ],
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  }   
+}    
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+         
+- respCode: 404/Not found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 409/Inappropriate state of object for performing operation
+    body:
+      model: 
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+    
+- respCode: 500/Authentication Server error
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### GET /order/get Получить текущее состояние заказа
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+  parameters:
+    orderId:
+      type: string
+      desc: id интересующего заказа
+response:
+- respCode: 200/Success
+    body:
+      model:
+        id:
+          type: string
+          desc: идентификатор заказа
+        status: 
+          type: string
+          desc: статус заказа
+        version:
+          type: int
+          desc: версия объекта
+        orderItems:
+          type: array
+          desc: товарные позиции заказа 
+          - id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              id:
+                type: int
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
+        delivery:      
+          pickupPoint:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            id:
+              type: int
+              desc: идентификатор точки доставки
+            name:
+              type: string
+              desc: название точки доставки
+            address:
+              type: string
+              desc: адрес точки доставки
+          homeDelivery:
+            type: object
+            spec: описание точки доставки, куда надо доставить заказ
+            companyName:
+              type: string
+              desc: имя компании
+            cost:
+              type: double
+              desc: стоимость доставки
+    example-value: |
+{
+  "id": "string",
+  "version": 2,
+  "status": "IN_PROGRESS",  
+  "orderItems": [
+    {
+      "id": 0,
+      "product": {
+        "id": 0,
+        "name": "string",
+        "price": 0
+      },
+      "quantity": 0
+    }
+  ],
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  }   
+}    
+
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+         
+- respCode: 404/Not found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+- respCode: 500/Authentication Server error
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+
+##### GET /order/getall Получить все заказы клиента
+
+request: 
+  headers:
+    cookies: 
+      sessionId:
+        type: string 
+        desc: идентификатор сессии клиента
+response:
+- respCode: 200/Success
+    body:
+      model:
+        orders:
+        type: array
+        desc: список заказов
+        - id:
+            type: string
+            desc: идентификатор заказа
+          status: 
+            type: string
+            desc: статус заказа
+          version:
+            type: int
+            desc: версия объекта
+          orderItems:
+            type: array
+            desc: товарные позиции заказа 
+            - id:
+                type: int
+                desc: идентификатор товарной позиции
+              product:
+                id:
+                  type: int
+                  desc: идентификатор товара
+                name:
+                  type: string
+                  desc: наименование товара
+                price:
+                  type: double
+                  desc: цена товара
+              quantity:
+                type: int
+                desc: количество товарных единиц в заказе
+          delivery:      
+            pickupPoint:
+              type: object
+              spec: описание точки доставки, куда надо доставить заказ
+              id:
+                type: int
+                desc: идентификатор точки доставки
+              name:
+                type: string
+                desc: название точки доставки
+              address:
+                type: string
+                desc: адрес точки доставки
+            homeDelivery:
+              type: object
+              spec: описание точки доставки, куда надо доставить заказ
+              companyName:
+                type: string
+                desc: имя компании
+              cost:
+                type: double
+                desc: стоимость доставки
+    example-value: |
+{
+  "orders": [
+    {
+    "id": "string",
+    "version": 2,
+    "status": "IN_PROGRESS",  
+    "orderItems": [
+      {
+        "id": 0,
+        "product": {
+          "id": 0,
+          "name": "string",
+          "price": 0
+        },
+        "quantity": 0
+      }
+    ],
+    "delivery": {
+      "pickupPoint": {
+        "id": 11,
+        "name": "string",
+        "address": "string"
+      },
+      "homeDelivery": {
+        "companyName": "string",
+        "cost": 12.12
+      }
+    }
+   }
+  ] 
+}  
+    
+
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+         
+- respCode: 500/Authentication Server error
+    body:
+      model:
+        errorMessage:
+          type: string
+          desc: описание ошибки 
+      example-value: |
+{
+ "errorMessage": "string"
+}   
+
+

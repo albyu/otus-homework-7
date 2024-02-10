@@ -1,0 +1,146 @@
+#### store (сервис учета товаров на складе)
+##### GET /store/get Получение количества единиц товара на складах
+
+request: 
+  parameters:
+    productId:
+      type: int
+      desc: идентификатор интересующего продукта
+response:
+- respCode: 200/Success
+    body:
+      model:
+        productId:
+          type: int
+          desc: идентификатор продукта
+        productPlaces:
+          type: array
+          desc: количества товара на каждом из складов
+        - 
+          store:
+            type: object
+            desc: описание склада              
+            id:
+              type: int
+              desc: идентификатор склада
+            name:
+              type: string
+              desc: название склада
+            address:
+              type: string
+              desc: адрес склада
+          quantity:
+            type: int
+            desc: количество товара на складе
+      example-value: |
+{
+ "productId": 124
+ "productPlaces": [
+  {
+   "store": {
+     "id": 1,
+     "name": "string",
+     "address": "string"     
+   },
+   "quantity": 2   
+  }
+ ]
+}      
+              
+- respCode: 401/Not authorized
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+- respCode: 404/Not Found
+    body:
+     model: 
+       errorMessage:
+         type: string
+         desc: описание ошибки 
+     example-value: |
+{
+ "errorMessage": "string"
+}   
+
+##### Поток готовых к отправке заказов от store к delivery
+##### Format 10 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    orderId:
+      type: string
+      desc: идентификатор заказа
+    orderItems:
+      type: array
+      desc: товарные позиции заказа 
+    - 
+      id:
+        type: int
+        desc: идентификатор товарной позиции
+      product:
+        type: object
+        desc: заказанный товар 
+        id:
+          type: int
+          desc: идентификатор товара
+        name:
+          type: string
+          desc: наименование товара
+        price:
+          type: double
+          desc: цена товара
+      quantity:
+        type: int        
+        desc: количество товарных единиц в заказе
+      productPlaces:
+        type: array
+        desc: количества товара на каждом из складов
+      - 
+        store:
+          type: object
+          desc: описание склада              
+          id:
+            type: int
+            desc: идентификатор склада
+          name:
+            type: string
+            desc: название склада
+          address:
+            type: string
+            desc: адрес склада
+        quantity:
+            type: int
+            desc: количество товарных единиц, зарезервированных для товара на складе      
+  example-value: |
+{
+ "orderId": "string",
+ "orderItems": [
+  {
+   "id": 1,
+   "product": {
+     "id": 1,
+     "name": "string",
+     "price": 123.12,          
+    },
+   "quantity": 5,
+   "productPlaces": [
+    {
+     "store": {
+       "id": 1,
+       "name": "string",
+       "address": "string"     
+     },
+     "quantity": 5   
+    }   
+   ]         
+  }     
+ ]
+}
+

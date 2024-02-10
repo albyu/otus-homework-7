@@ -1,0 +1,224 @@
+#### orchestra (оркестратор согласования заказа)
+
+##### Поток заказов, требующих подтверждения, от order к orchestra
+##### Format 6 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    orderId: 
+      type: string
+      spec: Идентификатор заказа
+    version:
+      type: int
+      spec: Версия объекта
+    clientId:
+      type: string
+      spec: идентификатор клиента
+    orderItems:
+      type: array
+      desc: товарные позиции заказа 
+      - id:
+          type: int
+          desc: идентификатор товарной позиции
+        productId:
+          type: int
+          desc: идентификатор товара
+        productName:
+          type: string
+          desc: название товара  
+        quantity:
+          type: int
+          desc: количество товарных единиц в заказе     
+    delivery:      
+      pickupPoint:
+        type: object
+        spec: описание точки доставки, куда надо доставить заказ
+        id:
+          type: int
+          desc: идентификатор точки доставки
+        name:
+          type: string
+          desc: название точки доставки
+        address:
+          type: string
+          desc: адрес точки доставки
+      homeDelivery:
+        type: object
+        spec: описание точки доставки, куда надо доставить заказ
+        companyName:
+          type: string
+          desc: имя компании
+        cost:
+          type: double
+          desc: стоимость доставки
+  example-value: |
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "orderItems": [
+    {
+      "id": 1,
+      "productId": 2
+      "productName": "string",
+      "productPrice": 20.20      
+      "quantity": 0
+    }
+  ],
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  } 
+}
+
+##### Поток ответов на запросы подьверждений, от orchestra к order
+##### Format 7 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    orderId: 
+      type: string
+      spec: Идентификатор заказа
+    version:
+      type: int
+      spec: Версия объекта
+    response:
+      type: string
+      spec: Результат выполнения (SUCCESS/FAIL)
+  example-value: |
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "orderItems": [
+    {
+      "id": 1,
+      "productId": 2
+      "productName": "string",
+      "productPrice": 20.20      
+      "quantity": 0
+    }
+  ]
+}
+  
+##### Поток запросов через Message Broker на подтверждения от orchestra к payment, store, delivery
+##### Format 8 на компонентной схеме
+
+format: JSON
+messageBody:
+  model:
+    orderId: 
+      type: string
+      spec: Идентификатор заказа
+    requestType:
+      type: string
+      spec: Тип запрашиваемой операции CONFIRM (подтверждение)/REVERSE(отмена)
+    confirmator:
+      type: string
+      spec: Код системы, у которой запрашиваем подтверждение (PAYMENT/STORE/DELIVERY)
+    orderItems:
+      type: array
+      desc: товарные позиции заказа 
+      - id:
+          type: int
+          desc: идентификатор товарной позиции
+        productId:
+          type: int
+          desc: идентификатор товара
+        productName:
+          type: string
+          desc: название товара  
+        quantity:
+          type: int
+          desc: количество товарных единиц в заказе     
+    delivery:      
+      pickupPoint:
+        type: object
+        spec: описание точки доставки, куда надо доставить заказ
+        id:
+          type: int
+          desc: идентификатор точки доставки
+        name:
+          type: string
+          desc: название точки доставки
+        address:
+          type: string
+          desc: адрес точки доставки
+      homeDelivery:
+        type: object
+        spec: описание точки доставки, куда надо доставить заказ
+        companyName:
+          type: string
+          desc: имя компании
+        cost:
+          type: double
+          desc: стоимость доставки          
+  example-value: |
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "orderItems": [
+    {
+      "id": 1,
+      "productId": 2
+      "productName": "string",
+      "productPrice": 20.20      
+      "quantity": 0
+    }
+  ],
+  "delivery": {
+    "pickupPoint": {
+      "id": 11,
+      "name": "string",
+      "address": "string"
+    },
+    "homeDelivery": {
+      "companyName": "string",
+      "cost": 12.12
+    }
+  }
+}
+  
+##### Поток ответов на запросы подтверждений от payment, store, delivery к orchestra
+##### Format 9 на компонентной схеме
+format: JSON
+messageBody:
+  model:
+    orderId: 
+      type: string
+      spec: Идентификатор заказа
+    requestType:
+      type: string
+      spec: Тип запрашиваемой операции CONFIRM (подтверждение)/REVERSE(отмена)
+    confirmator:
+      type: string
+      spec: Код системы, у которой запрашиваем подтверждение (PAYMENT/STORE/DELIVERY)
+    response:
+      type: string
+      spec: Результат выполнения (SUCCESS/FAIL)
+  example-value: |
+{
+  "orderId": "string",
+  "requestType": "CONFIRM",
+  "confirmator": "PAYMENT",
+  "response": "SUCCESS"
+}
+
+
+
+  
+  
+
+
+  
+
