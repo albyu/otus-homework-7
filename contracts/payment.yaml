@@ -21,7 +21,8 @@ response:
         tokens:
           type: array
           desc: Список привязанных средств платежа
-        - internalTokenId:
+         - 
+          internalTokenId:
             type: long
             desc: ид средства платежа в payment           
           tokenType:
@@ -91,7 +92,8 @@ request:
       tokens:
         type: array
         desc: Отредактированный список привязанных средств платежа
-      - internalTokenId:
+       - 
+        internalTokenId:
           type: long
           desc: ид средства платежа в payment           
         tokenType:
@@ -129,7 +131,8 @@ response:
         tokens:
           type: array
           desc: Список привязанных средств платежа
-        - internalTokenId:
+         - 
+          internalTokenId:
             type: long
             desc: ид средства платежа в payment           
           tokenType:
@@ -316,36 +319,37 @@ response:
         status:
           type: string
           desc: статус платежа (SUCCESS, PENDING, DECLINE)
-        - transactions: 
+        transactions: 
           type: array
           desc: список транзакций (попыток оплаты)
-            token:
-              type: object
-              desc: токен, по которому выполнялась оплата            
-              internalTokenId:
-                type: long
-                desc: ид средства платежа в payment           
-              tokenType:
-                type: string
-                desc: Тип средства оплаты (BANK_CARD/WALLET)
-              externalTokenId:
-                type: string
-                desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
-              description:
-                type: string
-                desc: Описание, заданное пользователем                            
-            externalId:
-              type: string
-              desc: идентификатор внешней транзакции
-            internalId:
+         -
+          token:
+            type: object
+            desc: токен, по которому выполнялась оплата            
+            internalTokenId:
               type: long
-              desc: идентификатор внутренней транзакции
-            result:
-              type: object
-              desc: результат оплаты ("SUCCESS", "NOT_SUFFICIENT_FUNDS", etc)
-            timestamp:
-              type: timestamp
-              desc: время выполненения операции  
+              desc: ид средства платежа в payment           
+            tokenType:
+              type: string
+              desc: Тип средства оплаты (BANK_CARD/WALLET)
+            externalTokenId:
+              type: string
+              desc: Внешний ид средства платежа (для BANK_CARD: номер карты) 
+            description:
+              type: string
+              desc: Описание, заданное пользователем                            
+          externalId:
+            type: string
+            desc: идентификатор внешней транзакции
+          internalId:
+            type: long
+            desc: идентификатор внутренней транзакции
+          result:
+            type: object
+            desc: результат оплаты ("SUCCESS", "NOT_SUFFICIENT_FUNDS", etc)
+          timestamp:
+            type: timestamp
+            desc: время выполненения операции  
       example-value: |
 {
    "orderId": "string",

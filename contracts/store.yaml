@@ -16,7 +16,7 @@ response:
         productPlaces:
           type: array
           desc: количества товара на каждом из складов
-        - 
+         - 
           store:
             type: object
             desc: описание склада              
@@ -80,7 +80,7 @@ messageBody:
     orderItems:
       type: array
       desc: товарные позиции заказа 
-    - 
+     - 
       id:
         type: int
         desc: идентификатор товарной позиции
@@ -102,7 +102,7 @@ messageBody:
       productPlaces:
         type: array
         desc: количества товара на каждом из складов
-      - 
+       - 
         store:
           type: object
           desc: описание склада              

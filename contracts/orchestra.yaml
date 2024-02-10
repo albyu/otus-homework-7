@@ -18,18 +18,19 @@ messageBody:
     orderItems:
       type: array
       desc: товарные позиции заказа 
-      - id:
-          type: int
-          desc: идентификатор товарной позиции
-        productId:
-          type: int
-          desc: идентификатор товара
-        productName:
-          type: string
-          desc: название товара  
-        quantity:
-          type: int
-          desc: количество товарных единиц в заказе     
+     - 
+      id:
+        type: int
+        desc: идентификатор товарной позиции
+      productId:
+        type: int
+        desc: идентификатор товара
+      productName:
+        type: string
+        desc: название товара  
+      quantity:
+        type: int
+        desc: количество товарных единиц в заказе     
     delivery:      
       pickupPoint:
         type: object
@@ -128,18 +129,19 @@ messageBody:
     orderItems:
       type: array
       desc: товарные позиции заказа 
-      - id:
-          type: int
-          desc: идентификатор товарной позиции
-        productId:
-          type: int
-          desc: идентификатор товара
-        productName:
-          type: string
-          desc: название товара  
-        quantity:
-          type: int
-          desc: количество товарных единиц в заказе     
+     - 
+      id:
+        type: int
+        desc: идентификатор товарной позиции
+      productId:
+        type: int
+        desc: идентификатор товара
+      productName:
+        type: string
+        desc: название товара  
+      quantity:
+        type: int
+        desc: количество товарных единиц в заказе     
     delivery:      
       pickupPoint:
         type: object

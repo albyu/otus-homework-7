@@ -15,17 +15,16 @@ request:
       orderItems:
         type: array
         desc: товарные позиции заказа 
-      - 
-          product:
-            type: object
-            desc: продукт в заказе
-            id:
-              type: int
-              desc: идентификатор товара
+       - 
+        product:
+          type: object
+          desc: продукт в заказе
+          id:
+            type: int
+            desc: идентификатор товара
           quantity:
             type: int
-            desc: количество товарных единиц в заказе
-            
+            desc: количество товарных единиц в заказе            
       delivery:      
         pickupPoint:
           type: object
@@ -88,25 +87,25 @@ response:
         orderItems:
           type: array
           desc: товарные позиции заказа 
-        - 
+         - 
+          id:
+            type: int
+            desc: идентификатор товарной позиции
+          product:
+            type: object
+            desc: продукт в заказе
             id:
               type: int
-              desc: идентификатор товарной позиции
-            product:
-              type: object
-              desc: продукт в заказе
-              id:
-                type: int
-                desc: идентификатор товара
-              name:
-                type: string
-                desc: наименование товара
-              price:
-                type: double
-                desc: цена товара
-            quantity:
-              type: int
-              desc: количество товарных единиц в заказе
+              desc: идентификатор товара
+            name:
+              type: string
+              desc: наименование товара
+            price:
+              type: double
+              desc: цена товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
         delivery:      
           pickupPoint:
             type: object
@@ -221,16 +220,15 @@ request:
         type: array
         desc: товарные позиции заказа 
       - 
-          product:
-            type: object
-            desc: заказанный продукт
-            id:
-              type: int
-              desc: идентификатор товара
-          quantity:
+        product:
+          type: object
+          desc: заказанный продукт
+          id:
             type: int
-            desc: количество товарных единиц в заказе
-            
+            desc: идентификатор товара
+        quantity:
+          type: int
+          desc: количество товарных единиц в заказе          
       delivery:      
         pickupPoint:
           type: object
@@ -294,25 +292,25 @@ response:
         orderItems:
           type: array
           desc: товарные позиции заказа 
-        - 
+         - 
+          id:
+            type: int
+            desc: идентификатор товарной позиции
+          product:
+            type: object
+            desc: продукт в заказе
             id:
               type: int
-              desc: идентификатор товарной позиции
-            product:
-              type: object
-              desc: продукт в заказе
-              id:
-                type: int
-                desc: идентификатор товара
-              name:
-                type: string
-                desc: наименование товара
-              price:
-                type: double
-                desc: цена товара
-            quantity:
-              type: int
-              desc: количество товарных единиц в заказе
+              desc: идентификатор товара
+            name:
+              type: string
+              desc: наименование товара
+            price:
+              type: double
+              desc: цена товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
         delivery:      
           pickupPoint:
             type: object
@@ -426,17 +424,16 @@ request:
       orderItems:
         type: array
         desc: товарные позиции заказа 
-      - 
-          product:
-            type: object
-            desc: продукт в заказе
-            id:
-              type: int
-              desc: идентификатор товара
-          quantity:
+       - 
+        product:
+          type: object
+          desc: продукт в заказе
+          id:
             type: int
-            desc: количество товарных единиц в заказе
-            
+            desc: идентификатор товара
+        quantity:
+          type: int
+          desc: количество товарных единиц в заказе            
       delivery:      
         pickupPoint:
           type: object
@@ -500,25 +497,25 @@ response:
         orderItems:
           type: array
           desc: товарные позиции заказа 
-        - 
+         - 
+          id:
+            type: int
+            desc: идентификатор товарной позиции
+          product:
+            type: object
+            desc: продукт в заказе
             id:
               type: int
-              desc: идентификатор товарной позиции
-            product:
-              type: object
-              desc: продукт в заказе
-              id:
-                type: int
-                desc: идентификатор товара
-              name:
-                type: string
-                desc: наименование товара
-              price:
-                type: double
-                desc: цена товара
-            quantity:
-              type: int
-              desc: количество товарных единиц в заказе
+              desc: идентификатор товара
+            name:
+              type: string
+              desc: наименование товара
+            price:
+              type: double
+              desc: цена товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
         delivery:      
           pickupPoint:
             type: object
@@ -632,7 +629,7 @@ request:
       orderItems:      
         type: array
         desc: товарные позиции заказа 
-      -
+       -
         product:
           type: object
           desc: продукт в заказе
@@ -705,22 +702,25 @@ response:
         orderItems:
           type: array
           desc: товарные позиции заказа 
-          - id:
+         - 
+          id:
+            type: int
+            desc: идентификатор товарной позиции
+          product:
+            type: object
+            desc: продукт в заказе
+            id:
               type: int
-              desc: идентификатор товарной позиции
-            product:
-              id:
-                type: int
-                desc: идентификатор товара
-              name:
-                type: string
-                desc: наименование товара
-              price:
-                type: double
-                desc: цена товара
-            quantity:
-              type: int
-              desc: количество товарных единиц в заказе
+              desc: идентификатор товара
+            name:
+              type: string
+              desc: наименование товара
+            price:
+              type: double
+              desc: цена товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
         delivery:      
           pickupPoint:
             type: object
@@ -843,22 +843,25 @@ response:
         orderItems:
           type: array
           desc: товарные позиции заказа 
-          - id:
+         - 
+          id:
+            type: int
+            desc: идентификатор товарной позиции
+          product:
+            type: object
+            desc: продукт в заказе
+            id:
               type: int
-              desc: идентификатор товарной позиции
-            product:
-              id:
-                type: int
-                desc: идентификатор товара
-              name:
-                type: string
-                desc: наименование товара
-              price:
-                type: double
-                desc: цена товара
-            quantity:
-              type: int
-              desc: количество товарных единиц в заказе
+              desc: идентификатор товара
+            name:
+              type: string
+              desc: наименование товара
+            price:
+              type: double
+              desc: цена товара
+          quantity:
+            type: int
+            desc: количество товарных единиц в заказе
         delivery:      
           pickupPoint:
             type: object
@@ -971,22 +974,25 @@ response:
           orderItems:
             type: array
             desc: товарные позиции заказа 
-            - id:
+           - 
+            id:
+              type: int
+              desc: идентификатор товарной позиции
+            product:
+              type: object
+              desc: продукт в заказе
+              id:
                 type: int
-                desc: идентификатор товарной позиции
-              product:
-                id:
-                  type: int
-                  desc: идентификатор товара
-                name:
-                  type: string
-                  desc: наименование товара
-                price:
-                  type: double
-                  desc: цена товара
-              quantity:
-                type: int
-                desc: количество товарных единиц в заказе
+                desc: идентификатор товара
+              name:
+                type: string
+                desc: наименование товара
+              price:
+                type: double
+                desc: цена товара
+            quantity:
+              type: int
+              desc: количество товарных единиц в заказе
           delivery:      
             pickupPoint:
               type: object

@@ -18,6 +18,7 @@ response:
         pickupPoints:
           type: array
           desc: список точек доставки          
+         -
           id:
             type: int
             desc: идентификатор точки
@@ -71,15 +72,16 @@ response:
         options:
           type: array
           desc: список вариантов доставки
-          - companyName:
-              type: string
-              desc: имя компании
-            cost:
-              type: double
-              desc: стоимость доставки
-            estimatedDate:
-              type: date
-              desc: оценочное время доставки
+         - 
+          companyName:
+            type: string
+            desc: имя компании
+          cost:
+            type: double
+            desc: стоимость доставки
+          estimatedDate:
+            type: date
+            desc: оценочное время доставки
       example-value: |
 {
   "address": "string",
